@@ -1,0 +1,340 @@
+/* =====================================================
+   全局样式 + React Flow 自定义节点样式
+   ===================================================== */
+
+/* ----- 全局重置 ----- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----- 整体布局 ----- */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+/* ----- 顶部工具栏 ----- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 52px;
+  background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ----- 主体区域 ----- */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ----- 左侧节点面板 ----- */
+.app-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid #e8e8e8;
+  background: #fafafa;
+  overflow-y: auto;
+}
+
+/* ----- 中央画板 ----- */
+.app-canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* =====================================================
+   左侧节点面板样式
+   ===================================================== */
+.node-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px 8px;
+}
+
+.node-panel-header {
+  padding: 4px 4px 12px 4px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 12px;
+}
+
+.node-group {
+  margin-bottom: 16px;
+}
+
+.node-group-title {
+  padding: 2px 4px 6px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 可拖拽节点卡片 */
+.draggable-node-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.draggable-node-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-node-card:active {
+  cursor: grabbing;
+  transform: scale(0.97);
+}
+
+.draggable-node-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+.draggable-node-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.draggable-node-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+}
+
+.draggable-node-desc {
+  font-size: 11px;
+  color: #888;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.node-panel-tip {
+  margin-top: auto;
+  padding: 12px 4px 4px 4px;
+  text-align: center;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* =====================================================
+   自定义 React Flow 节点样式
+   ===================================================== */
+.custom-node {
+  min-width: 160px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.custom-node:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 节点头部：图标 + 标题 + 状态 */
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.node-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* 各节点类型图标颜色 */
+.start-icon {
+  color: #52c41a;
+}
+
+.llm-icon {
+  color: #1677ff;
+}
+
+.tts-icon {
+  color: #722ed1;
+}
+
+.end-icon {
+  color: #fa8c16;
+}
+
+.node-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #262626;
+  flex: 1;
+}
+
+.node-status-icon {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.node-desc {
+  font-size: 11px;
+  color: #8c8c8c;
+  line-height: 1.4;
+}
+
+/* React Flow Handle 样式 */
+.node-handle {
+  width: 10px !important;
+  height: 10px !important;
+  background: #999 !important;
+  border: 2px solid #fff !important;
+  transition: background 0.2s ease;
+}
+
+.node-handle:hover {
+  background: #1677ff !important;
+}
+
+/* =====================================================
+   调试抽屉样式
+   ===================================================== */
+.debug-section {
+  margin-bottom: 16px;
+}
+
+.debug-loading {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f0f5ff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* 节点结果列表 */
+.node-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+/* 单个节点结果卡片 */
+.node-result-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fafafa;
+  transition: border-color 0.2s;
+}
+
+.node-result-card:hover {
+  border-color: #d0d0d0;
+}
+
+.node-result-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.node-result-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #e8e8e8;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.node-result-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.node-result-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* JSON 输出区域 */
+.json-output {
+  font-size: 12px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  background: #f6f8fa;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+  color: #333;
+}
+
+/* 音频播放器 */
+.audio-player-wrapper {
+  padding: 8px 0 16px 0;
+}
+
+.audio-player-wrapper audio {
+  border-radius: 8px;
+  background: #f5f5f5;
+}

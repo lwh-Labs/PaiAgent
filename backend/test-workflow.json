@@ -1,0 +1,5 @@
+{
+  "name": "AI Podcast Workflow",
+  "description": "AI播客工作流",
+  "graphJson": "{\"nodes\":[{\"id\":\"start-1\",\"type\":\"START\",\"position\":{\"x\":250,\"y\":50},\"config\":{}},{\"id\":\"llm-1\",\"type\":\"LLM\",\"position\":{\"x\":250,\"y\":200},\"config\":{\"provider\":\"openai\",\"model\":\"gpt-4o\",\"apiKey\":\"sk-test123\",\"systemPrompt\":\"You are a podcast host\",\"temperature\":0.7,\"maxTokens\":2048}},{\"id\":\"tts-1\",\"type\":\"TTS\",\"position\":{\"x\":250,\"y\":350},\"config\":{\"apiKey\":\"sk-tts456\",\"voiceId\":\"longxiaochun\",\"speed\":1.0,\"pitch\":1.0}},{\"id\":\"end-1\",\"type\":\"END\",\"position\":{\"x\":250,\"y\":500},\"config\":{}}],\"edges\":[{\"id\":\"e1\",\"source\":\"start-1\",\"target\":\"llm-1\"},{\"id\":\"e2\",\"source\":\"llm-1\",\"target\":\"tts-1\"},{\"id\":\"e3\",\"source\":\"tts-1\",\"target\":\"end-1\"}]}"
+}
