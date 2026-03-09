@@ -40,9 +40,9 @@ const EndNode: React.FC<NodeProps<EndNodeData>> = ({ data }) => {
       {/* 节点图标 + 标题 */}
       <div className="node-header">
         <FlagOutlined className="node-icon end-icon" />
-        <span className="node-title">结束</span>
+        <span className="node-title">输出</span>
       </div>
-      <div className="node-desc">工作流终止</div>
+      <div className="node-desc">工作流输出结果</div>
     </div>
   );
 };

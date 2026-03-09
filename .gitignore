@@ -1,0 +1,21 @@
+# Java / Maven
+backend/target/
+
+# runtime database files
+backend/data/*.mv.db
+backend/data/*.lock.db
+backend/data/*.trace.db
+
+# frontend dependencies
+frontend/node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store

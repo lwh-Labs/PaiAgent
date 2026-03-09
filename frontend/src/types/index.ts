@@ -71,6 +71,19 @@ export interface TTSConfig {
   pitch?: number;
 }
 
+// 输出节点配置 - 单个输出参数
+export interface OutputParam {
+  name: string;
+  type: 'input' | 'reference';
+  value: string; // 手动输入的值，或引用节点ID（如 "llm-101"）
+}
+
+// 输出节点配置
+export interface EndConfig {
+  outputParams: OutputParam[];
+  answerContent: string; // 回答内容模板，支持 {{paramName}} 引用
+}
+
 // 节点执行状态（前端用于驱动视觉状态）
 export type NodeStatus = 'default' | 'running' | 'success' | 'failed';
 

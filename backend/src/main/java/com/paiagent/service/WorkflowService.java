@@ -108,12 +108,12 @@ public class WorkflowService {
                 .updatedAt(workflow.getUpdatedAt())
                 .build();
 
-        // 解析 graphJson 并脱敏 apiKey
+        // 解析 graphJson 并脱敏 apiKey，返回字符串
         if (workflow.getGraphJson() != null && !workflow.getGraphJson().isEmpty()) {
             try {
                 JsonNode graphNode = objectMapper.readTree(workflow.getGraphJson());
                 JsonNode maskedGraph = maskApiKeys(graphNode.deepCopy());
-                dto.setGraphJson(maskedGraph);
+                dto.setGraphJson(objectMapper.writeValueAsString(maskedGraph));
             } catch (JsonProcessingException e) {
                 log.warn("解析 graphJson 失败, workflowId={}, 原始内容将作为字符串返回", workflow.getId(), e);
                 dto.setGraphJson(workflow.getGraphJson());

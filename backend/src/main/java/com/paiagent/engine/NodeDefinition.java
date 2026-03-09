@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * 节点定义
- * 存储从 graphJson 中解析出来的单个节点信息，包含节点 ID、类型及其配置参数
+ * 存储从 graphJson 中解析出来的单个节点信息，包含节点 ID、类型、位置及其配置参数
  */
 @Data
 @Builder
@@ -26,6 +26,11 @@ public class NodeDefinition {
      * 节点类型：START / LLM / TTS / END
      */
     private String type;
+
+    /**
+     * 节点位置（前端画布坐标）
+     */
+    private Position position;
 
     /**
      * 节点配置参数
@@ -92,5 +97,16 @@ public class NodeDefinition {
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    /**
+     * 节点位置（前端画布坐标）
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Position {
+        private double x;
+        private double y;
     }
 }

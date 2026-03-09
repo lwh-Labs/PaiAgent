@@ -32,9 +32,9 @@ const StartNode: React.FC<NodeProps<StartNodeData>> = ({ data }) => {
       {/* 节点图标 + 标题 */}
       <div className="node-header">
         <PlayCircleOutlined className="node-icon start-icon" />
-        <span className="node-title">用户输入</span>
+        <span className="node-title">输入</span>
       </div>
-      <div className="node-desc">工作流起始</div>
+      <div className="node-desc">用户输入文本</div>
 
       {/* 仅有输出端口（底部） */}
       <Handle

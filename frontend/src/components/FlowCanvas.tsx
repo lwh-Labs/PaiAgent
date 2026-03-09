@@ -1,8 +1,9 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import ReactFlow, {
   Background,
   Controls,
   MiniMap,
+  MarkerType,
   type Node,
   type Edge,
   type OnNodesChange,
@@ -19,7 +20,8 @@ import TTSNode from './nodes/TTSNode';
 import EndNode from './nodes/EndNode';
 import LLMConfigPanel from './config/LLMConfigPanel';
 import TTSConfigPanel from './config/TTSConfigPanel';
-import type { LLMConfig, TTSConfig } from '../types';
+import EndConfigPanel from './config/EndConfigPanel';
+import type { LLMConfig, TTSConfig, EndConfig } from '../types';
 
 const { Title } = Typography;
 
@@ -104,8 +106,8 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
   // 点击节点时打开配置面板
   const handleNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
-      // START 和 END 节点无需配置
-      if (node.type === 'startNode' || node.type === 'endNode') return;
+      // START 节点无需配置
+      if (node.type === 'startNode') return;
       setSelectedNode(node);
       setConfigDrawerOpen(true);
     },
@@ -137,10 +139,29 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
     [selectedNode, onNodeConfigChange]
   );
 
+  // END 配置变更
+  const handleEndConfigChange = useCallback(
+    (config: EndConfig) => {
+      if (!selectedNode) return;
+      onNodeConfigChange(selectedNode.id, config as unknown as Record<string, unknown>);
+      setSelectedNode((prev) =>
+        prev ? { ...prev, data: { ...prev.data, config } } : prev
+      );
+    },
+    [selectedNode, onNodeConfigChange]
+  );
+
+  // 计算上游节点列表（排除 END 节点自身）
+  const upstreamNodes = useMemo(
+    () => nodes.filter((n) => n.type !== 'endNode'),
+    [nodes]
+  );
+
   // 节点配置抽屉标题
   const configDrawerTitle =
     selectedNode?.type === 'llmNode' ? '大模型节点配置'
     : selectedNode?.type === 'ttsNode' ? '音频合成节点配置'
+    : selectedNode?.type === 'endNode' ? '输出节点配置'
     : '节点配置';
 
   return (
@@ -165,6 +186,10 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
         defaultEdgeOptions={{
           style: { stroke: '#b1b1b7', strokeWidth: 2 },
           animated: false,
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: '#b1b1b7',
+          },
         }}
       >
         <Background gap={16} color="#f0f0f0" />
@@ -202,6 +227,13 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
           <TTSConfigPanel
             config={(selectedNode.data?.config as TTSConfig) || {} as TTSConfig}
             onChange={handleTTSConfigChange}
+          />
+        )}
+        {selectedNode?.type === 'endNode' && (
+          <EndConfigPanel
+            config={(selectedNode.data?.config as EndConfig) || { outputParams: [], answerContent: '' }}
+            upstreamNodes={upstreamNodes}
+            onChange={handleEndConfigChange}
           />
         )}
       </Drawer>
