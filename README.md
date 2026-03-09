@@ -12,6 +12,7 @@
 ```
 用户输入文字 → 大模型节点（LLM 处理） → 超拟人音频合成节点（CosyVoice TTS） → 结束节点（输出音频） → 调试面板播放音频
 ```
+<img width="1917" height="1029" alt="{5FC09AFF-11DA-453B-A152-28FA62160E84}" src="https://github.com/user-attachments/assets/e81b2318-25f3-4631-95fd-6aa53cdef831" />
 
 ---
 
