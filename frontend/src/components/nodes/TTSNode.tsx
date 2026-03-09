@@ -1,7 +1,7 @@
 import React from 'react';
 import { Handle, Position, type NodeProps } from 'reactflow';
 import { SoundOutlined, LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import type { NodeStatus, TTSConfig } from '../../types';
+import type { NodeStatus, TTSConfig, TTSOutputParam } from '../../types';
 
 // TTS 节点的数据结构
 interface TTSNodeData {
@@ -32,15 +32,20 @@ const StatusIcon: React.FC<{ status?: NodeStatus }> = ({ status }) => {
   return null;
 };
 
-/** 超拟人音频合成节点（TTS）— 调用 CosyVoice 合成语音，有输入/输出端口 */
+/** 超拟人音频合成节点（TTS）— 调用超拟人 TTS 合成语音，有输入/输出端口 */
 const TTSNode: React.FC<NodeProps<TTSNodeData>> = ({ data }) => {
   const { config, status } = data;
-  const voiceLabel = config?.voiceId || '未配置音色';
+  const modelLabel = config?.model || '未配置';
+  const inputParams = config?.inputParams || [];
+  const outputParams = config?.outputParams || [];
+
+  // 获取 voice 值
+  const voiceValue = inputParams.find(p => p.name === 'voice')?.value || 'Cherry';
 
   return (
     <div
       className="custom-node tts-node"
-      style={getStatusStyle(status)}
+      style={{ ...getStatusStyle(status), minWidth: 160 }}
     >
       {/* 输入端口（顶部） */}
       <Handle
@@ -59,10 +64,32 @@ const TTSNode: React.FC<NodeProps<TTSNodeData>> = ({ data }) => {
         </div>
       </div>
 
-      {/* 显示当前配置的音色 ID */}
+      {/* 显示模型名称 */}
       <div className="node-desc">
-        音色：{voiceLabel}
+        {modelLabel}
       </div>
+
+      {/* 显示输入参数 */}
+      <div style={{ marginTop: 6, fontSize: 11, color: '#666' }}>
+        <div style={{ fontWeight: 500, marginBottom: 2 }}>输入:</div>
+        <div style={{ paddingLeft: 4 }}>
+          text ({inputParams.find(p => p.name === 'text')?.type === 'reference' ? '引用' : '输入'})
+        </div>
+        <div style={{ paddingLeft: 4 }}>voice: {voiceValue}</div>
+        <div style={{ paddingLeft: 4 }}>language_type: Auto</div>
+      </div>
+
+      {/* 显示输出参数 */}
+      {outputParams.length > 0 && (
+        <div style={{ marginTop: 6, fontSize: 11, color: '#666' }}>
+          <div style={{ fontWeight: 500, marginBottom: 2 }}>输出:</div>
+          {outputParams.map((param: TTSOutputParam, idx: number) => (
+            <div key={idx} style={{ paddingLeft: 4 }}>
+              {param.name || '未命名'}: {param.type}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 输出端口（底部） */}
       <Handle

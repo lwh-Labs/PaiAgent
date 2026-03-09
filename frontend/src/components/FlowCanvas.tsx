@@ -315,6 +315,7 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
         {selectedNode?.type === 'ttsNode' && (
           <TTSConfigPanel
             config={(selectedNode.data?.config as TTSConfig) || {} as TTSConfig}
+            upstreamNodes={upstreamNodes.filter((n) => n.id !== selectedNode.id)}
             onChange={handleTTSConfigChange}
           />
         )}

@@ -80,12 +80,27 @@ export interface LLMConfig {
   outputParams?: LLMOutputParam[]; // 输出参数配置
 }
 
+// TTS 节点输入参数
+export interface TTSInputParam {
+  name: string;                    // 参数名：text / voice / language_type
+  type: 'input' | 'reference';     // 参数类型：输入 或 引用
+  value: string;                   // 手动输入的值，或引用节点ID
+  referenceField?: string;         // 引用节点的输出字段名
+}
+
+// TTS 节点输出参数
+export interface TTSOutputParam {
+  name: string;                    // 变量名
+  type: 'string';                  // 变量类型
+  description?: string;            // 描述
+}
+
 // TTS 节点配置
 export interface TTSConfig {
-  apiKey: string;
-  voiceId: string;
-  speed?: number;
-  pitch?: number;
+  apiKey: string;                  // API Key
+  model: string;                   // 模型名称，默认 qwen3-tts-flash
+  inputParams?: TTSInputParam[];   // 输入参数配置
+  outputParams?: TTSOutputParam[]; // 输出参数配置
 }
 
 // 输出节点配置 - 单个输出参数
