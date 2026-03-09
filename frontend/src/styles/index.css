@@ -246,6 +246,39 @@ body,
 }
 
 /* =====================================================
+   React Flow 边（Edge）选中样式
+   ===================================================== */
+
+/* 选中状态的边 */
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #1677ff !important;
+  stroke-width: 3px;
+}
+
+/* 鼠标悬停时的边 */
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: #1677ff !important;
+  stroke-width: 2.5px;
+}
+
+/* 边的可点击区域（增大点击范围） */
+.react-flow__edge-path {
+  cursor: pointer;
+}
+
+/* 边的选中动画效果 */
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 10;
+  }
+}
+
+/* =====================================================
    调试抽屉样式
    ===================================================== */
 .debug-section {

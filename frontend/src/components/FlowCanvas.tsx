@@ -4,12 +4,15 @@ import ReactFlow, {
   Controls,
   MiniMap,
   MarkerType,
+  SelectionMode,
+  getBezierPath,
   type Node,
   type Edge,
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
   type NodeTypes,
+  type EdgeProps,
   useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -31,6 +34,77 @@ const nodeTypes: NodeTypes = {
   llmNode: LLMNode,
   ttsNode: TTSNode,
   endNode: EndNode,
+};
+
+// 自定义边组件 - 带删除按钮
+const CustomEdge: React.FC<EdgeProps> = ({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  style = {},
+  markerEnd,
+  selected,
+}) => {
+  const [edgePath, labelX, labelY] = getBezierPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+  });
+
+  return (
+    <>
+      {/* 边路径 */}
+      <path
+        id={id}
+        style={{
+          ...style,
+          strokeWidth: selected ? 3 : 2,
+          stroke: selected ? '#1677ff' : '#b1b1b7',
+        }}
+        className="react-flow__edge-path"
+        d={edgePath}
+        markerEnd={markerEnd}
+      />
+      {/* 选中时显示删除按钮 */}
+      {selected && (
+        <g transform={`translate(${labelX}, ${labelY})`}>
+          <circle
+            r={12}
+            fill="#ff4d4f"
+            stroke="#fff"
+            strokeWidth={2}
+            style={{ cursor: 'pointer' }}
+          />
+          <text
+            x={0}
+            y={0}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            style={{
+              fontSize: 14,
+              fontWeight: 'bold',
+              fill: '#fff',
+              pointerEvents: 'none',
+            }}
+          >
+            ×
+          </text>
+        </g>
+      )}
+    </>
+  );
+};
+
+// 注册自定义边类型
+const edgeTypes = {
+  default: CustomEdge,
 };
 
 // 节点类型 -> React Flow 节点类型名称映射
@@ -61,7 +135,7 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
   setNodes,
   onNodeConfigChange,
 }) => {
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, setEdges } = useReactFlow();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   // 当前选中节点（用于打开配置抽屉）
@@ -112,6 +186,14 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
       setConfigDrawerOpen(true);
     },
     []
+  );
+
+  // 点击边时删除边
+  const handleEdgeClick = useCallback(
+    (_event: React.MouseEvent, edge: Edge) => {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    },
+    [setEdges]
   );
 
   // LLM 配置变更
@@ -178,9 +260,15 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onNodeClick={handleNodeClick}
+        onEdgeClick={handleEdgeClick}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
-        deleteKeyCode="Delete"
+        deleteKeyCode={['Delete', 'Backspace']}
+        selectionMode={SelectionMode.Partial}
+        selectionOnDrag
+        panOnDrag={[1, 2]}
+        selectNodesOnDrag={false}
         snapToGrid
         snapGrid={[16, 16]}
         defaultEdgeOptions={{
@@ -220,6 +308,7 @@ const FlowCanvasInner: React.FC<FlowCanvasProps> = ({
         {selectedNode?.type === 'llmNode' && (
           <LLMConfigPanel
             config={(selectedNode.data?.config as LLMConfig) || {} as LLMConfig}
+            upstreamNodes={upstreamNodes.filter((n) => n.id !== selectedNode.id)}
             onChange={handleLLMConfigChange}
           />
         )}

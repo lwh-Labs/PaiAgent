@@ -53,6 +53,21 @@ export interface NodeResult {
   errorMessage?: string;
 }
 
+// LLM 节点输入参数
+export interface LLMInputParam {
+  name: string;           // 参数名
+  type: 'input' | 'reference';  // 参数类型：输入 或 引用
+  value: string;          // 手动输入的值，或引用节点ID
+  referenceField?: string; // 引用节点的输出字段名（如 "text"）
+}
+
+// LLM 节点输出参数
+export interface LLMOutputParam {
+  name: string;           // 变量名
+  type: 'string';         // 变量类型，目前只有 string
+  description?: string;   // 描述，可为空
+}
+
 // LLM 节点配置
 export interface LLMConfig {
   provider: 'openai' | 'deepseek' | 'qwen';
@@ -61,6 +76,8 @@ export interface LLMConfig {
   systemPrompt?: string;
   temperature?: number;
   maxTokens?: number;
+  inputParams?: LLMInputParam[];   // 输入参数配置
+  outputParams?: LLMOutputParam[]; // 输出参数配置
 }
 
 // TTS 节点配置

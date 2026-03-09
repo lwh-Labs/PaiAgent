@@ -1,7 +1,7 @@
 import React from 'react';
 import { Handle, Position, type NodeProps } from 'reactflow';
 import { RobotOutlined, LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import type { NodeStatus, LLMConfig } from '../../types';
+import type { NodeStatus, LLMConfig, LLMInputParam, LLMOutputParam } from '../../types';
 
 // LLM 节点的数据结构
 interface LLMNodeData {
@@ -44,11 +44,13 @@ const LLMNode: React.FC<NodeProps<LLMNodeData>> = ({ data }) => {
   const { config, status } = data;
   const providerLabel = config?.provider ? PROVIDER_LABELS[config.provider] : '未配置';
   const modelLabel = config?.model || '未配置';
+  const inputParams = config?.inputParams || [];
+  const outputParams = config?.outputParams || [];
 
   return (
     <div
       className="custom-node llm-node"
-      style={getStatusStyle(status)}
+      style={{ ...getStatusStyle(status), minWidth: 160 }}
     >
       {/* 输入端口（顶部） */}
       <Handle
@@ -71,6 +73,30 @@ const LLMNode: React.FC<NodeProps<LLMNodeData>> = ({ data }) => {
       <div className="node-desc">
         {providerLabel} / {modelLabel}
       </div>
+
+      {/* 显示输入参数 */}
+      {inputParams.length > 0 && (
+        <div style={{ marginTop: 6, fontSize: 11, color: '#666' }}>
+          <div style={{ fontWeight: 500, marginBottom: 2 }}>输入:</div>
+          {inputParams.map((param: LLMInputParam, idx: number) => (
+            <div key={idx} style={{ paddingLeft: 4 }}>
+              {param.name || '未命名'} ({param.type === 'reference' ? '引用' : '输入'})
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 显示输出参数 */}
+      {outputParams.length > 0 && (
+        <div style={{ marginTop: 6, fontSize: 11, color: '#666' }}>
+          <div style={{ fontWeight: 500, marginBottom: 2 }}>输出:</div>
+          {outputParams.map((param: LLMOutputParam, idx: number) => (
+            <div key={idx} style={{ paddingLeft: 4 }}>
+              {param.name || '未命名'}: {param.type}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 输出端口（底部） */}
       <Handle
